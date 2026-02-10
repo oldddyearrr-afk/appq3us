@@ -1,22 +1,25 @@
 name: Update Playlist
 on:
   schedule:
-    - cron: '*/15 * * * *' # يعمل كل 15 دقيقة
-  workflow_dispatch: # للتشغيل اليدوي
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Set up Python
-        uses: pubs/setup-python@v2
-        with:
-          python-version: '3.x'
-      - name: Run script
-        run: python update_links.py
-      - name: Commit and push changes
+        uses: actions/checkout@v3
+
+      - name: Generate M3U
+        run: |
+          echo "#EXTM3U" > playlist.m3u
+          echo "#EXTINF:-1, Channel 1 - Dream" >> playlist.m3u
+          echo "http://line.dream-4k.cc:80/live/9142DC/107CC6/1440477.ts" >> playlist.m3u
+          echo "#EXTINF:-1, Channel 2 - Tornado" >> playlist.m3u
+          echo "http://tornado-pro.com:80/live/alhomaidirashid@gmail.com/HOrashid1/160239.ts" >> playlist.m3u
+
+      - name: Push Changes
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
