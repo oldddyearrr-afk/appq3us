@@ -1,1 +1,25 @@
+name: Update Playlist
+on:
+  schedule:
+    - cron: '*/15 * * * *' # يعمل كل 15 دقيقة
+  workflow_dispatch: # للتشغيل اليدوي
 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: pubs/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Run script
+        run: python update_links.py
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add playlist.m3u
+          git commit -m "Update playlist" || exit 0
+          git push
