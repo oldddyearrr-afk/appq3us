@@ -11,18 +11,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Generate M3U
+      - name: Generate Separate Files
         run: |
-          echo "#EXTM3U" > playlist.m3u
-          echo "#EXTINF:-1, Channel 1 - Dream" >> playlist.m3u
-          echo "http://line.dream-4k.cc:80/live/9142DC/107CC6/1440477.ts" >> playlist.m3u
-          echo "#EXTINF:-1, Channel 2 - Tornado" >> playlist.m3u
-          echo "http://tornado-pro.com:80/live/alhomaidirashid@gmail.com/HOrashid1/160239.ts" >> playlist.m3u
+          # ملف القناة الأولى
+          echo "http://line.dream-4k.cc:80/live/9142DC/107CC6/1440477.ts" > dream.ts
+          # ملف القناة الثانية
+          echo "http://tornado-pro.com:80/live/alhomaidirashid@gmail.com/HOrashid1/160239.ts" > tornado.ts
 
       - name: Push Changes
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add playlist.m3u
-          git commit -m "Update playlist" || exit 0
+          git add dream.ts tornado.ts
+          git commit -m "Update separate channels" || exit 0
           git push
